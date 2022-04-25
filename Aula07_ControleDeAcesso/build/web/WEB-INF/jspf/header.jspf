@@ -1,0 +1,38 @@
+
+<%@ page pageEncoding="UTF-8" %>
+
+<%
+    if(request.getParameter("session-login")!=null){
+        session.setAttribute("session-name",request.getParameter("session-name"));
+        response.sendRedirect(request.getRequestURI());
+        
+    }else if(request.getParameter("session-logout")!=null){
+        session.removeAttribute("session-name");
+        response.sendRedirect(request.getRequestURI());
+    }
+    String sessionName = (String) session.getAttribute("session-name");
+%>
+
+<%! int[] loteria = new int[7]; %>
+
+<h1>JoseHoracioApp</h1>
+
+<form method="post">
+    <a href="index.jsp">Índice</a> |
+    <a href="about.jsp">Sobre o autor</a> |
+    <a href="loteria.jsp">Dicas Loteria</a> |
+    
+    <%if(sessionName == null){%>
+        <input type="text" name="session-name" placeholder="Digite seu usuário" required/>
+        <input type="submit" name="session-login" value="Entrar"/>
+        
+            <%for(int i=1; i<=6; i++){%>
+                <% loteria[i] = ((int)(Math.random()*100)); %>
+            <%}%>
+        <% session.setAttribute("loteria",loteria[6]); %>
+        
+    <%}else{%>
+        Bem vindo, <%= sessionName %>
+        <input type="submit" name="session-logout" value="Sair"/>
+    <%}%>    
+</form>
